@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WorkConnect</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#061321;
+ color:#fff;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.app{
+ max-width:430px;
+ min-height:100vh;
+ margin:auto;
+ background:#081a2b;
+ padding-bottom:75px;
+}
+header{
+ padding:18px 16px;
+ background:#0a2035;
+ border-bottom:1px solid #183c56;
+ position:sticky;
+ top:0;
+ z-index:5;
+}
+.logo{font-size:20px;font-weight:800}
+.subtitle{font-size:12px;color:#8da6ba;margin-top:3px}
+
+.page{display:none;padding:15px}
+.page.active{display:block}
+
+h2{margin:4px 0}
+h3{margin-top:0}
+
+.card{
+ background:#0b2943;
+ border:1px solid #194964;
+ border-radius:15px;
+ padding:14px;
+ margin:10px 0;
+}
+.card.click{cursor:pointer}
+.card.click:active{transform:scale(.98)}
+
+.row{
+ display:flex;
+ align-items:center;
+ gap:12px;
+}
+.grow{flex:1}
+
+.icon{
+ width:44px;
+ height:44px;
+ background:#123d5d;
+ border-radius:12px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:21px;
+}
+
+.small{
+ color:#91aabd;
+ font-size:13px;
+ margin-top:4px;
+}
+
+.badge{
+ display:inline-block;
+ padding:4px 8px;
+ border-radius:20px;
+ background:#1688ff;
+ font-size:10px;
+ font-weight:bold;
+}
+.red{background:#e84d59}
+.green{background:#0eb979}
+.gray{background:#173e59}
+
+button{
+ border:0;
+ border-radius:10px;
+ padding:11px 14px;
+ background:#1688ff;
+ color:white;
+ font-weight:700;
+ font-size:14px;
+}
+button:active{transform:scale(.97)}
+.full{width:100%;margin-top:8px}
+
+input,select,textarea{
+ width:100%;
+ padding:12px;
+ margin:6px 0;
+ border-radius:10px;
+ border:1px solid #28536e;
+ background:#071b2d;
+ color:white;
+ font-size:14px;
+}
+textarea{min-height:100px}
+
+.filters{
+ display:flex;
+ gap:7px;
+ overflow-x:auto;
+ padding:8px 0;
+}
+.filter{
+ white-space:nowrap;
+ background:#092238;
+ color:#9eb4c4;
+ border:1px solid #28536e;
+}
+.filter.active{
+ background:#1688ff;
+ color:white;
+}
+
+.event{
+ background:#dceeff;
+ color:#073151;
+ border-left:5px solid #1688ff;
+ padding:11px;
+ border-radius:10px;
+ margin:8px 0;
+}
+.event.green{
+ background:#d9f5e9;
+ border-left-color:#0eb979;
+}
+
+.hour{
+ height:42px;
+ border-top:1px solid #17384d;
+ color:#718ca0;
+ font-size:10px;
+ padding:5px;
+}
+
+.nav{
+ position:fixed;
+ bottom:0;
+ left:50%;
+ transform:translateX(-50%);
+ width:min(430px,100%);
+ height:70px;
+ background:#06182bf5;
+ border-top:1px solid #19435c;
+ display:flex;
+ z-index:10;
+}
+
+.nav button{
+ flex:1;
+ background:none;
+ color:#7893a7;
+ border-radius:0;
+ font-size:10px;
+ padding:5px;
+}
+.nav button b{
+ display:block;
+ font-size:20px;
+}
+.nav button.active{color:#39a8ff}
+
+.modal{
+ position:fixed;
+ inset:0;
+ background:#0009;
+ display:none;
+ align-items:flex-end;
+ z-index:20;
+}
+.modal.active{display:flex}
+
+.modalbox{
+ width:min(430px,100%);
+ max-height:90vh;
+ overflow:auto;
+ background:#082039;
+ border-radius:20px 20px 0 0;
+ padding:18px;
+ border:1px solid #24516c;
+}
+
+.close{
+ float:right;
+ background:#173e59;
+}
+
+.toast{
+ position:fixed;
+ bottom:82px;
+ left:50%;
+ transform:translateX(-50%);
+ background:#123e60;
+ padding:12px 16px;
+ border-radius:12px;
+ display:none;
+ z-index:30;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+ <div class="logo">🛠️ WorkConnect</div>
+ <div class="subtitle">Arbeitskommunikation</div>
+</header>
+
+<!-- STARTSEITE -->
+<section id="home" class="page active">
+
+<h2>Hallo 👋</h2>
+<div class="small">Was möchtest du öffnen?</div>
+
+<div class="card click row" onclick="openPage('chat')">
+ <div class="icon">💬</div>
+ <div class="grow">
+  <b>Chat</b>
+  <div class="small">3 neue Nachrichten</div>
+ </div>
+ ›
+</div>
+
+<div class="card click row" onclick="openPage('contacts')">
+ <div class="icon">👥</div>
+ <div class="grow">
+  <b>Kontakte</b>
+  <div class="small">12 Mitarbeiter</div>
+ </div>
+ ›
+</div>
+
+<div class="card click row" onclick="openPage('calendar')">
+ <div class="icon">📅</div>
+ <div class="grow">
+  <b>Kalender</b>
+  <div class="small">4 Termine heute</div>
+ </div>
+ ›
+</div>
+
+<div class="card click row" onclick="openPage('orders')">
+ <div class="icon">📋</div>
+ <div class="grow">
+  <b>Aufträge</b>
+  <div class="small">8 offene Aufträge</div>
+ </div>
+ ›
+</div>
+
+<div class="card click row" onclick="openPage('complaints')">
+ <div class="icon">⚠️</div>
+ <div class="grow">
+  <b>Reklamationen</b>
+  <div class="small">2 offen</div>
+ </div>
+ ›
+</div>
+
+<div class="card click row" onclick="openPage('clock')">
+ <div class="icon">🕐</div>
+ <div class="grow">
+  <b>Stempeluhr</b>
+  <div class="small">Arbeitszeit</div>
+ </div>
+ ›
+</div>
+
+</section>
+
+
+<!-- CHAT -->
+<section id="chat" class="page">
+
+<h2>💬 Chat</h2>
+
+<input placeholder="Chats suchen...">
+
+<div class="filters">
+<button class="filter active">Alle</button>
+<button class="filter">Ungelesen</button>
+<button class="filter">Gruppen</button>
+</div>
+
+<div class="card click row" onclick="openModal('chat')">
+ <div class="icon">MM</div>
+ <div class="grow">
+  <b>Max Müller</b>
+  <div class="small">Alles klar, bin morgen da.</div>
+ </div>
+ <span class="badge red">1</span>
+</div>
+
+<div class="card click row" onclick="openModal('chat')">
+ <div class="icon">👥</div>
+ <div class="grow">
+  <b>Team Allgemein</b>
+  <div class="small">Morgen 8 Uhr Besprechung.</div>
+ </div>
+</div>
+
+<button class="full" onclick="openModal('newchat')">
+＋ Neue Nachricht / Gruppe
+</button>
+
+</section>
+
+
+<!-- KONTAKTE -->
+<section id="contacts" class="page">
+
+<h2>👥 Kontakte</h2>
+
+<input placeholder="Kontakte suchen...">
+
+<div class="filters">
+<button class="filter active">Alle</button>
+<button class="filter">Mitarbeiter</button>
+<button class="filter">Kunden</button>
+</div>
+
+<div class="card row">
+ <div class="icon">MM</div>
+ <div class="grow">
+  <b>Max Müller</b>
+  <div class="small">Monteur · +49 170 1234567</div>
+ </div>
+ <button onclick="toast('Anruf gestartet')">📞</button>
+</div>
+
+<div class="card row">
+ <div class="icon">AS</div>
+ <div class="grow">
+  <b>Anna Schneider</b>
+  <div class="small">Monteurin · +49 172 9876543</div>
+ </div>
+ <button onclick="openModal('chat')">💬</button>
+</div>
+
+<div class="card">
+ <b>👤 Max Mustermann</b>
+ <div class="small">
+  Kunde<br>
+  📞 +49 170 1234567<br>
+  📍 Musterstraße 12<br>
+  82467 Garmisch-Partenkirchen
+ </div>
+</div>
+
+<button class="full" onclick="openModal('contact')">
+＋ Kontakt hinzufügen
+</button>
+
+</section>
+
+
+<!-- KALENDER -->
+<section id="calendar" class="page">
+
+<h2>📅 Kalender</h2>
+
+<div class="filters">
+<button class="filter active">Tag</button>
+<button class="filter">Woche</button>
+<button class="filter">Monat</button>
+</div>
+
+<div class="card">
+
+<div style="text-align:center">
+<b>Freitag, 04.09.2026</b>
+</div>
+
+<div class="hour">08:00</div>
+<div class="hour">09:00</div>
+
+<div class="event" onclick="openModal('order1042')">
+<b>#1042 · Max Mustermann</b><br>
+10:00–12:00<br>
+📍 Musterstraße 12<br>
+👷 Max Müller
+</div>
+
+<div class="hour">12:00</div>
+<div class="hour">13:00</div>
+
+<div class="event green" onclick="openModal('order1045')">
+<b>#1045 · Anna Schneider</b><br>
+14:30–16:00<br>
+📍 Hauptstraße 8<br>
+👷 Thomas Weber
+</div>
+
+<div class="hour">16:00</div>
+
+</div>
+
+<button class="full" onclick="openModal('event')">
+＋ Termin / Besprechung
+</button>
+
+</section>
+
+
+<!-- AUFTRÄGE -->
+<section id="orders" class="page">
+
+<h2>📋 Aufträge</h2>
+
+<input placeholder="Aufträge suchen...">
+
+<div class="card click" onclick="openModal('order1042')">
+ <b>#1042 · Max Mustermann</b>
+ <span class="badge" style="float:right">Offen</span>
+ <div class="small">
+  04.09.2026 · 10:00–12:00<br>
+  👷 Max Müller<br>
+  📍 Musterstraße 12
+ </div>
+</div>
+
+<div class="card click" onclick="openModal('order1045')">
+ <b>#1045 · Anna Schneider</b>
+ <span class="badge green" style="float:right">In Arbeit</span>
+ <div class="small">
+  04.09.2026 · 14:30–16:00<br>
+  👷 Thomas Weber<br>
+  📍 Hauptstraße 8
+ </div>
+</div>
+
+<button class="gray full" onclick="openModal('pdf')">
+📎 PDF-Auftrag importieren
+</button>
+
+</section>
+
+
+<!-- REKLAMATIONEN -->
+<section id="complaints" class="page">
+
+<h2>⚠️ Reklamationen</h2>
+
+<div class="card click" onclick="openModal('complaint')">
+ <b>#1042 · Max Mustermann</b>
+ <span class="badge red" style="float:right">Dringend</span>
+ <div class="small">Wasserhahn tropft.</div>
+</div>
+
+<div class="card">
+ <b>#1048 · Thomas Berger</b>
+ <span class="badge" style="float:right">In Bearbeitung</span>
+ <div class="small">Kühlschrank kühlt nicht richtig.</div>
+</div>
+
+<button class="full" onclick="openModal('complaint')">
+＋ Reklamation aufnehmen
+</button>
+
+</section>
+
+
+<!-- STEMPELUHR -->
+<section id="clock" class="page">
+
+<h2>🕐 Stempeluhr</h2>
+
+<div class="card" style="text-align:center">
+
+<div style="font-size:42px;font-weight:800">
+08:24
+</div>
+
+<div class="small">
+📍 Firma · 12 m entfernt
+</div>
+
+<button class="green full"
+onclick="toast('Eingestempelt – Standort Firma erkannt')">
+✓ EINSTEMPELN
+</button>
+
+<button class="red full"
+onclick="toast('Ausgestempelt – Arbeitszeit gespeichert')">
+□ AUSSTEMPELN
+</button>
+
+</div>
+
+<div class="card">
+<b>Heute</b>
+<div class="small">
+08:02–17:00 · 8:58 Std.
+</div>
+</div>
+
+</section>
+
+
+<!-- VERWALTUNG -->
+<section id="more" class="page">
+
+<h2>⚙️ Verwaltung</h2>
+
+<div class="card click" onclick="openModal('hours')">
+<b>👨‍💼 Arbeitszeiten</b>
+<div class="small">Tag · Woche · Monat · Soll/Ist</div>
+</div>
+
+<div class="card click" onclick="openModal('locations')">
+<b>📍 Stempelorte</b>
+<div class="small">Firma 100 m · Lager 150 m</div>
+</div>
+
+<div class="card click" onclick="openModal('roles')">
+<b>🔐 Rollen & Rechte</b>
+<div class="small">
+Admin · Geschäftsführung · Projektleitung · Mitarbeiter
+</div>
+</div>
+
+<div class="card click" onclick="openModal('homeSettings')">
+<b>🏠 Startseite anpassen</b>
+<div class="small">
+Bereiche sortieren / ausblenden
+</div>
+</div>
+
+<div class="card click" onclick="openModal('notify')">
+<b>🔔 Arbeitsmodus</b>
+<div class="small">
+Wann Mitteilungen angezeigt werden
+</div>
+</div>
+
+</section>
+
+
+<!-- NAVIGATION -->
+
+<nav class="nav">
+
+<button data-page="home" onclick="openPage('home')">
+<b>⌂</b>
+Start
+</button>
+
+<button data-page="calendar" onclick="openPage('calendar')">
+<b>▣</b>
+Kalender
+</button>
+
+<button data-page="orders" onclick="openPage('orders')">
+<b>▤</b>
+Aufträge
+</button>
+
+<button data-page="contacts" onclick="openPage('contacts')">
+<b>♙</b>
+Kontakte
+</button>
+
+<button data-page="more" onclick="openPage('more')">
+<b>•••</b>
+Mehr
+</button>
+
+</nav>
+
+
+<!-- MODAL -->
+
+<div id="modal" class="modal">
+
+<div class="modalbox">
+
+<button class="close" onclick="closeModal()">✕</button>
+
+<div id="modalContent"></div>
+
+</div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+</div>
+
+
+<script>
+
+function openPage(id){
+
+ document.querySelectorAll(".page")
+ .forEach(p=>p.classList.remove("active"));
+
+ const page=document.getElementById(id);
+
+ if(page){
+  page.classList.add("active");
+ }
+
+ document.querySelectorAll(".nav button")
+ .forEach(b=>{
+  b.classList.toggle(
+   "active",
+   b.dataset.page===id
+  );
+ });
+
+ window.scrollTo(0,0);
+}
+
+
+function closeModal(){
+
+ document.getElementById("modal")
+ .classList.remove("active");
+
+}
+
+
+function toast(message){
+
+ const t=document.getElementById("toast");
+
+ t.textContent=message;
+ t.style.display="block";
+
+ setTimeout(()=>{
+  t.style.display="none";
+ },1800);
+
+}
+
+
+function save(message){
+
+ closeModal();
+ toast(message);
+
+}
+
+
+function openModal(type){
+
+ let html="";
+
+ if(type==="event"){
+
+ html=`
+ <h3>📅 Termin / Besprechung</h3>
+
+ <input placeholder="Titel" value="Montage">
+
+ <input type="date" value="2026-09-04">
+
+ <input type="time" value="10:00">
+
+ <input type="time" value="12:00">
+
+ <select>
+  <option>Max Müller</option>
+  <option>Thomas Weber</option>
+ </select>
+
+ <button class="full"
+ onclick="save('Termin gespeichert')">
+ Speichern
+ </button>
+ `;
+
+ }
+
+ else if(type==="order1042" || type==="order1045"){
+
+ const nr=type==="order1042"
+ ?"#1042 · Max Mustermann"
+ :"#1045 · Anna Schneider";
+
+ html=`
+ <h3>📋 Auftrag</h3>
+
+ <div class="card">
+ <b>${nr}</b>
+
+ <div class="small">
+ 📍 Kundenadresse<br>
+ 👷 Monteur zugewiesen<br>
+ 📅 Mit Kalender verknüpft
+ </div>
+ </div>
+
+ <button class="gray full"
+ onclick="closeModal();openPage('calendar')">
+ 📅 Im Kalender anzeigen
+ </button>
+ `;
+
+ }
+
+ else if(type==="pdf"){
+
+ html=`
+ <h3>📎 PDF-Auftrag importieren</h3>
+
+ <p class="small">
+ PDF auswählen. In der fertigen App werden
+ Auftragsnummer, Kundenname, Telefon und
+ Adresse automatisch aus dem Dokument übernommen.
+ </p>
+
+ <input type="file" accept=".pdf,application/pdf">
+
+ <div class="card">
+ <b>Vorschau</b>
+
+ <div class="small">
+ #1042 · Max Mustermann<br>
+ 📍 Musterstraße 12<br>
+ 82467 Garmisch-Partenkirchen
+ </div>
+ </div>
+
+ <button class="full"
+ onclick="save('PDF-Daten übernommen')">
+ Übernehmen
+ </button>
+ `;
+
+ }
+
+ else if(type==="complaint"){
+
+ html=`
+ <h3>⚠️ Reklamation aufnehmen</h3>
+
+ <div class="card">
+ <b>Auftrag #1042 · Max Mustermann</b>
+
+ <div class="small">
+ 📞 +49 170 1234567<br>
+ 📍 Musterstraße 12
+ </div>
+ </div>
+
+ <textarea placeholder="Beschreibung">
+Wasserhahn tropft.
+ </textarea>
+
+ <button class="gray full"
+ onclick="toast('Bilder ausgewählt')">
+ 📷 Bilder hinzufügen
+ </button>
+
+ <button class="gray full"
+ onclick="toast('Datei ausgewählt')">
+ 📎 Datei hinzufügen
+ </button>
+
+ <button class="red full"
+ onclick="save('Reklamation gespeichert')">
+ 💾 Speichern
+ </button>
+ `;
+
+ }
+
+ else if(type==="contact"){
+
+ html=`
+ <h3>👤 Kontakt hinzufügen</h3>
+
+ <input placeholder="Name">
+
+ <input placeholder="Telefon">
+
+ <input placeholder="E-Mail">
+
+ <input placeholder="Adresse">
+
+ <select>
+  <option>Mitarbeiter</option>
+  <option>Kunde</option>
+ </select>
+
+ <button class="full"
+ onclick="save('Kontakt gespeichert')">
+ Speichern
+ </button>
+ `;
+
+ }
+
+ else if(type==="chat" || type==="newchat"){
+
+ html=`
+ <h3>💬 Chat</h3>
+
+ <div class="card">
+ <b>Max Müller</b>
+
+ <div class="small">
+ Alles klar, bin morgen da.
+ </div>
+ </div>
+
+ <textarea placeholder="Nachricht schreiben..."></textarea>
+
+ <button class="full"
+ onclick="save('Nachricht gesendet')">
+ Senden
+ </button>
+ `;
+
+ }
+
+ else if(type==="hours"){
+
+ html=`
+ <h3>👨‍💼 Arbeitszeiten – Admin</h3>
+
+ <select>
+  <option>Max Müller</option>
+  <option>Anna Schneider</option>
+ </select>
+
+ <div class="card">
+ <b>Heute</b>
+ <div class="small">
+ 08:02–17:00 · 8:58 Std.
+ </div>
+ </div>
+
+ <div class="card">
+ <b>Diese Woche</b>
+ <div class="small">
+ 40:28 Std. · Soll 40:00 · +0:28
+ </div>
+ </div>
+
+ <div class="card">
+ <b>Dieser Monat</b>
+ <div class="small">
+ 142:36 Std. · Soll 152:00 · −9:24
+ </div>
+ </div>
+ `;
+
+ }
+
+ else if(type==="locations"){
+
+ html=`
+ <h3>📍 Stempelorte – Admin</h3>
+
+ <div class="card">
+ 🏢 Firma · Radius 100 m
+ <span class="badge green">Aktiv</span>
+ </div>
+
+ <div class="card">
+ 📦 Lager · Radius 150 m
+ <span class="badge green">Aktiv</span>
+ </div>
+
+ <button class="full"
+ onclick="save('Ort hinzufügen geöffnet')">
+ ＋ Ort hinzufügen
+ </button>
+ `;
+
+ }
+
+ else if(type==="roles"){
+
+ html=`
+ <h3>🔐 Rollen & Rechte</h3>
+
+ <div class="card">
+ <b>Admin</b>
+ <div class="small">Alle Funktionen</div>
+ </div>
+
+ <div class="card">
+ <b>Geschäftsführung</b>
+ <div class="small">
+ Aufträge, Kalender, Mitarbeiter
+ </div>
+ </div>
+
+ <div class="card">
+ <b>Projektleitung</b>
+ <div class="small">
+ Aufträge, Termine, Reklamationen
+ </div>
+ </div>
+
+ <div class="card">
+ <b>Mitarbeiter</b>
+ <div class="small">
+ Eigene Aufträge, Kalender, Chat, Stempeluhr
+ </div>
+ </div>
+ `;
+
+ }
+
+ else if(type==="homeSettings"){
+
+ html=`
+ <h3>🏠 Startseite anpassen</h3>
+
+ <p class="small">
+ Die Bereiche können später per Gedrückthalten
+ verschoben oder ausgeblendet werden.
+ </p>
+
+ <div class="card">⋮⋮ 💬 Chat</div>
+ <div class="card">⋮⋮ 👥 Kontakte</div>
+ <div class="card">⋮⋮ 📅 Kalender</div>
+ <div class="card">⋮⋮ 📋 Aufträge</div>
+
+ <button class="full"
+ onclick="save('Startseite gespeichert')">
+ Speichern
+ </button>
+ `;
+
+ }
+
+ else if(type==="notify"){
+
+ html=`
+ <h3>🔔 Arbeitsmodus</h3>
+
+ <label>
+ Arbeitsbeginn
+ <input type="time" value="07:00">
+ </label>
+
+ <label>
+ Arbeitsende
+ <input type="time" value="18:00">
+ </label>
+
+ <p class="small">
+ Außerhalb dieser Zeit werden Mitteilungen
+ nicht angezeigt.
+ </p>
+
+ <button class="full"
+ onclick="save('Arbeitsmodus gespeichert')">
+ Speichern
+ </button>
+ `;
+
+ }
+
+ document.getElementById("modalContent").innerHTML=html;
+
+ document.getElementById("modal")
+ .classList.add("active");
+
+}
+
+
+/* Startseite beim Laden aktiv setzen */
+openPage("home");
+
+</script>
+
+</body>
+</html>
