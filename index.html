@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071522">
+<title>WorkConnect – Prototyp</title>
+<style>
+:root{
+  --bg:#061322;--bg2:#091a2b;--panel:#14263a;--panel2:#192d43;
+  --line:#27425c;--text:#f4f7fb;--muted:#91a5b9;--blue:#258cff;
+  --green:#24c56d;--purple:#8b4de8;--orange:#ff922e;--red:#ef4a52;--teal:#18a9aa;
+  --shadow:0 12px 30px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#020912}
+body{color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+button:active{transform:scale(.985)}
+#app{min-height:100vh}
+.app{
+  max-width:520px;margin:auto;min-height:100vh;padding:0 14px 94px;
+  background:linear-gradient(180deg,var(--bg) 0%,#071827 70%,#061322 100%);
+}
+.top{
+  height:72px;padding:14px 3px 8px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg,#061322 72%,rgba(6,19,34,0));
+}
+.brand{display:flex;align-items:center;gap:9px;font-size:24px;font-weight:800;letter-spacing:-.6px}
+.brand:before{
+  content:"";width:28px;height:28px;border:3px solid #2b91ff;border-radius:9px;
+  transform:rotate(-42deg);display:block;box-shadow:inset 0 0 0 2px rgba(43,145,255,.15)
+}
+.brand span{color:#2f8cff}
+.icon{
+  width:42px;height:42px;border:1px solid #294159;background:#0f2235;border-radius:50%;
+  display:grid;place-items:center;font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.2)
+}
+.page{padding:2px 1px 18px}
+.hero{
+  position:relative;min-height:205px;padding:0 20px 22px;display:flex;flex-direction:column;justify-content:flex-end;
+  border:1px solid #233b53;border-radius:23px;overflow:hidden;margin:2px 0 16px;
+  box-shadow:var(--shadow);
+  background:
+    linear-gradient(180deg,rgba(2,11,20,.08),rgba(2,11,20,.18) 30%,rgba(2,10,18,.9) 100%),
+    linear-gradient(135deg,#35546b 0%,#173c55 45%,#0d2237 100%);
+}
+.hero:before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 24% 35%,rgba(255,188,105,.65) 0 3%,transparent 16%),
+    linear-gradient(160deg,transparent 30%,rgba(31,73,88,.8) 31% 38%,transparent 39%),
+    linear-gradient(20deg,transparent 48%,rgba(54,94,104,.8) 49% 56%,transparent 57%),
+    linear-gradient(145deg,transparent 44%,#132f42 45% 57%,transparent 58%);
+  opacity:.9
+}
+.hero h1,.hero p{position:relative;margin:0}
+.hero h1{font-size:27px;line-height:1.05;letter-spacing:-.8px}
+.hero p{font-size:15px;margin-top:7px;color:#edf2f7}
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.card{
+  min-height:102px;padding:14px 13px;border-radius:16px;border:1px solid #294159;
+  background:linear-gradient(145deg,#172b40,#112237);box-shadow:0 7px 18px rgba(0,0,0,.16);
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;
+}
+.card .ico{
+  width:43px;height:43px;border-radius:12px;display:grid;place-items:center;
+  color:white;font-size:22px;margin-bottom:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)
+}
+.card:nth-child(1) .ico{background:linear-gradient(135deg,#3ddc73,#19b85a)}
+.card:nth-child(2) .ico{background:linear-gradient(135deg,#438fff,#2469df)}
+.card:nth-child(3) .ico{background:linear-gradient(135deg,#a35df0,#7438cf)}
+.card:nth-child(4) .ico{background:linear-gradient(135deg,#ffad42,#f47720)}
+.card:nth-child(5) .ico{background:linear-gradient(135deg,#ff5962,#d9363e)}
+.card:nth-child(6) .ico{background:linear-gradient(135deg,#31b8b7,#168f94)}
+.card b{font-size:16px;letter-spacing:-.1px}
+.card small{display:block;color:#8fa4b9;font-size:12px;margin-top:3px}
+.bottom{
+  position:fixed;z-index:30;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(520px,100%);height:78px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:repeat(4,1fr);background:rgba(6,19,34,.97);
+  border-top:1px solid #21374d;backdrop-filter:blur(16px)
+}
+.nav{
+  border:0;background:transparent;color:#a7b6c5;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;border-radius:13px;font-size:11px
+}
+.nav span{font-size:23px;line-height:24px}
+.nav.active{color:#2c92ff}
+.nav.active span{filter:drop-shadow(0 2px 5px rgba(37,140,255,.35))}
+.section-title{font-size:25px;margin:10px 0 13px;letter-spacing:-.5px}
+.back{border:0;background:transparent;color:#8fb4d8;padding:5px 0;margin-bottom:3px}
+.toolbar{display:flex;gap:8px;margin-bottom:12px}
+.search{
+  flex:1;min-width:0;background:#102338;border:1px solid #28435d;border-radius:12px;
+  color:var(--text);padding:11px 13px;outline:none
+}
+.primary,.secondary,.danger{
+  border:0;border-radius:12px;padding:11px 14px;font-weight:700
+}
+.primary{background:var(--blue);color:#fff}
+.secondary{background:#21364b}
+.danger{background:#9c3038}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{
+  width:100%;border:1px solid #284159;background:#12263a;border-radius:14px;padding:11px;
+  display:flex;align-items:center;gap:10px;text-align:left
+}
+.avatar{width:40px;height:40px;border-radius:50%;background:#24496b;display:grid;place-items:center;font-weight:800;flex:0 0 auto}
+.row-main{flex:1;min-width:0}
+.row-main b{display:block}
+.row-main small{display:block;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.detail,.notice{
+  background:#11263a;border:1px solid #294159;border-radius:16px;padding:14px;
+  box-shadow:0 8px 18px rgba(0,0,0,.12)
+}
+.detail h3{margin:0 0 11px}
+.muted{color:var(--muted)}
+.empty{padding:25px;text-align:center;color:var(--muted);border:1px dashed #294159;border-radius:14px}
+.field{margin:10px 0}.field label{display:block;color:#9db0c2;font-size:12px;margin-bottom:5px}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px;border-radius:11px;border:1px solid #2a445c;background:#0c1d2e;color:#fff;outline:none
+}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.actions>*{flex:1}
+.permgrid{display:grid;gap:8px}
+.perm{padding:10px;background:#0d2032;border:1px solid #284159;border-radius:10px}
+.perm label{display:flex;justify-content:space-between;gap:10px}
+.modalwrap{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:none;
+  align-items:flex-end;justify-content:center;padding:12px
+}
+.modalwrap.open{display:flex}
+.modal{
+  width:min(520px,100%);max-height:88vh;overflow:auto;background:#102338;
+  border:1px solid #2b455e;border-radius:22px 22px 16px 16px;padding:18px;
+  box-shadow:0 -12px 45px rgba(0,0,0,.4)
+}
+h2{margin-top:0}
+@media(min-width:700px){
+  .app{min-height:100vh;border-left:1px solid #102337;border-right:1px solid #102337}
+}
+
+/* ===== Kalender-Design: Google-Kalender-ähnliche Ansicht ===== */
+.cal{background:#fff;color:#1f2937;border:1px solid #d8dee6;border-radius:14px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.16)}
+.cal .calhead{height:54px;display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid #e1e5ea;background:#fff}
+.cal .calhead b{font-size:15px;text-transform:capitalize}
+.cal .calhead .icon{width:auto;height:36px;padding:0 10px;border:1px solid #d7dde5;border-radius:9px;background:#fff;color:#3b4653;box-shadow:none;font-size:12px}
+.cal .calhead .icon:first-child,.cal .calhead>button.icon{font-size:23px;padding:0 11px}
+.viewtabs{display:flex;justify-content:center;gap:0;background:#f5f7fa;border-bottom:1px solid #e1e5ea;padding:5px}
+.viewtab{border:0;background:transparent;color:#586575;padding:8px 18px;border-radius:9px;font-size:12px}
+.viewtab.active{background:#e8f1ff;color:#1769d2;font-weight:700}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);background:#fafbfc;border-bottom:1px solid #e1e5ea}
+.weekdays>div{text-align:center;padding:8px 2px;color:#697586;font-size:11px;font-weight:700}
+.days{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(78px,auto);background:#dfe4ea;gap:1px}
+.day{background:#fff;padding:5px;min-width:0;cursor:pointer;overflow:hidden}
+.day em{display:block;font-style:normal;font-size:11px;color:#697586;margin-bottom:3px}
+.day.today em{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#1976d2;color:#fff;font-weight:800}
+.day.mutedday{background:#f7f8fa}.day.mutedday em{color:#a7b0bb}
+.event{display:block;width:100%;border:0;border-radius:4px;padding:3px 4px;margin:2px 0;text-align:left;color:#fff;font-size:9px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.event.green{background:#1a9b61}.event.orange{background:#f28b22}
+.days .day>small{font-size:9px;color:#687687}
+.weekview{display:grid;grid-template-columns:repeat(7,minmax(92px,1fr));overflow-x:auto;background:#e0e5ea;gap:1px}
+.weekcol{background:#fff;min-width:92px}.weekday{text-align:center;padding:7px;border-bottom:1px solid #e0e5ea;color:#697586;font-size:10px}.weekday b{font-size:14px;color:#273444}.weekbody{min-height:430px;padding:6px;background:linear-gradient(#fff 0,#fff 49px,#edf0f3 50px,#fff 51px);background-size:100% 51px;cursor:pointer}.weekevent{display:block;width:100%;border:0;border-radius:5px;padding:6px;margin:4px 0;color:#fff;text-align:left;font-size:9px}.weekevent.green{background:#1a9b61}.weekevent.orange{background:#f28b22}
+.dayview{display:grid;grid-template-columns:58px 1fr;background:#fff;min-height:520px;overflow:auto}.hours{border-right:1px solid #e0e5ea;background:#fafbfc}.hour{height:42px;padding:3px 5px;color:#748091;font-size:9px;border-bottom:1px solid #edf0f3}.dayevents{position:relative;min-width:250px;background:repeating-linear-gradient(to bottom,#fff 0,#fff 41px,#edf0f3 42px);cursor:pointer;padding:5px}.dayevent{display:block;width:100%;max-width:310px;border:0;border-left:4px solid #1976d2;border-radius:6px;background:#dcecff;color:#18344f;padding:8px;margin:3px 0;text-align:left;font-size:10px}
+@media(max-width:380px){.viewtab{padding:8px 12px}.days{grid-auto-rows:minmax(66px,auto)}.day{padding:4px 3px}.event{font-size:8px}.weekview{grid-template-columns:repeat(7,86px)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modalwrap" class="modalwrap" onclick="if(event.target===this)closeModal()"><div id="modal" class="modal"></div></div>
+<script>
+const KEY="workconnect_v2";
+const seed={
+customers:[
+{id:1,name:"Max Mustermann",address:"Hauptstraße 12, 82467 Garmisch-Partenkirchen",phone:"08821 123456",mobile:"0171 1234567",email:"max@mustermann.de"},
+{id:2,name:"Anna Beispiel",address:"Bahnhofstraße 8, 82467 Garmisch-Partenkirchen",phone:"08821 987654",mobile:"0176 9876543",email:"anna@beispiel.de"}],
+orders:[
+{id:1,no:"WC-1001",customer:1,title:"Küche Neubau",desc:"Neue Küche inklusive Montage.",status:"In Planung",employee:"Max Mustermann"},
+{id:2,no:"4711",customer:2,title:"Arbeitsplatte",desc:"Arbeitsplatte ausmessen und montieren.",status:"Montage",employee:"Thomas Schneider"}],
+complaints:[{id:1,no:"R-001",order:2,title:"Kante beschädigt",desc:"Beschädigung an der vorderen Kante.",status:"Offen"}],
+events:[
+{id:1,type:"Montage",date:"2026-09-08",time:"09:00",endTime:"12:00",order:1,customer:1,title:"Montage Küche",note:"Werkzeug und Silikon mitnehmen."},
+{id:2,type:"Termin",date:"2026-09-09",time:"14:00",endTime:"15:00",order:2,customer:2,title:"Aufmaß Arbeitsplatte",note:"Kunde ist vor Ort."}],
+employees:[
+{name:"Max Mustermann",role:"Admin",enabled:true,permissions:{customers:true,orders:true,complaints:true,calendar:true,documents:true,delete:true}},
+{name:"Thomas Schneider",role:"Monteur",enabled:true,permissions:{customers:false,orders:false,complaints:true,calendar:true,documents:true,delete:false}}]};
+let state=load()||JSON.parse(JSON.stringify(seed));
+state.route="home";state.calendarView=state.calendarView||"month";state.calendarDate=state.calendarDate||new Date(2026,8,8);state.currentUser=state.currentUser||"Max Mustermann";state.clocked=!!state.clocked;
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){localStorage.setItem(KEY,JSON.stringify({...state,route:undefined,calendarView:undefined,calendarDate:undefined}))}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function customer(id){return state.customers.find(x=>x.id==id)}
+function order(id){return state.orders.find(x=>x.id==id)}
+function emp(){return state.employees.find(x=>x.name===state.currentUser)||state.employees[0]}
+function can(area,action="edit"){let e=emp();if(e.role==="Admin")return true;let p=e.permissions||{};if(action==="delete")return !!p.delete&&!!p[area];return !!p[area]}
+function localISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function go(route){state.route=route;render()}
+function render(){document.getElementById("app").innerHTML=page();document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.r===state.route))}
+function page(){let body={home:home,customers:customers,orders:orders,calendar:calendar,more:more,complaints:complaints,admin:admin,time:time,documents:documents,chat:chat}[state.route]||home;return `<div class="app"><div class="top"><div class="brand">Work<span>Connect</span></div><button class="icon" onclick="showNotifications()">♧</button></div><main class="page">${body()}</main><nav class="bottom"><button class="nav" data-r="home" onclick="go('home')"><span>⌂</span>Start</button><button class="nav" data-r="calendar" onclick="go('calendar')"><span>▣</span>Kalender</button><button class="nav" data-r="orders" onclick="go('orders')"><span>▤</span>Aufträge</button><button class="nav" data-r="more" onclick="go('more')"><span>•••</span>Mehr</button></nav></div>`}
+function home(){return `<section class="hero"><h1>Hallo Max Müller</h1><p>Schön, dass du da bist.</p></section><div class="grid">
+<div class="card" onclick="go('chat')"><div class="ico">●●●</div><b>Chat</b><small>Nachrichten & Team</small></div>
+<div class="card" onclick="go('customers')"><div class="ico">●●</div><b>Kontakte</b><small>Team & Partner</small></div>
+<div class="card" onclick="go('calendar')"><div class="ico">▦</div><b>Kalender</b><small>Termine & Montagen</small></div>
+<div class="card" onclick="go('orders')"><div class="ico">▤</div><b>Aufträge</b><small>Meine Aufträge</small></div>
+<div class="card" onclick="go('complaints')"><div class="ico">!</div><b>Reklamationen</b><small>${state.complaints.filter(x=>x.status!=="Erledigt").length} offen</small></div>
+<div class="card" onclick="go('time')"><div class="ico">◷</div><b>Zeiterfassung</b><small>${state.clocked?"Aktiv":"Nicht aktiv"}</small></div></div>`}
+function customers(){return `<button class="back" onclick="go('home')">← Start</button><h1 class="section-title">Kunden</h1><div class="toolbar"><input class="search" placeholder="Name, Adresse, Telefon..." oninput="filterList('customers',this.value)">${can("customers")?`<button class="primary" onclick="newCustomer()">＋</button>`:""}</div><div id="list" class="list">${customerRows(state.customers)}</div>`}
+function customerRows(a){return a.map(c=>`<button class="row" onclick="openCustomer(${c.id})"><div class="avatar">${esc(c.name.split(" ").map(x=>x[0]).join("").slice(0,2))}</div><div class="row-main"><b>${esc(c.name)}</b><small>${esc(c.address)}</small><small>${esc(c.mobile||c.phone)}</small></div><span>›</span></button>`).join("")||`<div class="empty">Keine Kunden.</div>`}
+function filterList(type,q){let a=state[type].filter(x=>JSON.stringify(x).toLowerCase().includes(q.toLowerCase()));document.getElementById("list").innerHTML=type==="customers"?customerRows(a):orderRows(a)}
+function openCustomer(id){let c=customer(id);let os=state.orders.filter(o=>o.customer==id);document.getElementById("app").innerHTML=baseNoNav(`<button class="back" onclick="go('customers')">← Kunden</button><h1 class="section-title">${esc(c.name)}</h1><div class="detail"><h3>Kundendaten</h3><p><b>Adresse</b><br>${esc(c.address)}</p><p><b>Telefon</b><br>${esc(c.phone||"-")}<br><b>Mobil</b><br>${esc(c.mobile||"-")}<br><b>E-Mail</b><br>${esc(c.email||"-")}</p>${can("customers")?`<div class="actions"><button class="primary" onclick="editCustomer(${id})">✏️ Bearbeiten</button>${can("customers","delete")?`<button class="danger" onclick="delCustomer(${id})">🗑️ Löschen</button>`:""}</div>`:""}</div><div class="detail" style="margin-top:12px"><h3>Aufträge dieses Kunden</h3>${orderRows(os)||`<div class="empty">Noch keine Aufträge.</div>`}</div>`)}
+function newCustomer(){if(!can("customers"))return alert("Keine Berechtigung.");openModal(`<h2>Neuer Kunde</h2>${customerForm()}<div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveCustomer()">Speichern</button></div>`)}
+function customerForm(c={}){return `<div class="field"><label>Name</label><input id="cn" value="${esc(c.name)}"></div><div class="field"><label>Adresse</label><input id="ca" value="${esc(c.address)}"></div><div class="field"><label>Telefon privat</label><input id="cp" value="${esc(c.phone)}"></div><div class="field"><label>Mobil</label><input id="cm" value="${esc(c.mobile)}"></div><div class="field"><label>E-Mail</label><input id="ce" type="email" value="${esc(c.email)}"></div>`}
+function saveCustomer(id=null){let c=id?customer(id):{id:Date.now()};c.name=document.getElementById("cn").value.trim();c.address=document.getElementById("ca").value.trim();c.phone=document.getElementById("cp").value.trim();c.mobile=document.getElementById("cm").value.trim();c.email=document.getElementById("ce").value.trim();if(!c.name||!c.address)return alert("Name und Adresse sind Pflichtfelder.");if(!id)state.customers.push(c);save();closeModal();id?openCustomer(id):go("customers")}
+function editCustomer(id){if(!can("customers"))return alert("Keine Berechtigung.");let c=customer(id);openModal(`<h2>Kunde bearbeiten</h2>${customerForm(c)}<div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveCustomer(${id})">Speichern</button></div>`)}
+function delCustomer(id){if(!can("customers","delete"))return alert("Keine Löschberechtigung.");if(!confirm("Kunden wirklich löschen?"))return;state.customers=state.customers.filter(x=>x.id!=id);state.orders=state.orders.filter(x=>x.customer!=id);save();go("customers")}
+function orders(){return `<button class="back" onclick="go('home')">← Start</button><div style="display:flex;justify-content:space-between;align-items:center"><h1 class="section-title">Aufträge</h1>${can("orders")?`<button class="primary" onclick="newOrder()">＋ Auftrag</button>`:""}</div><div class="toolbar"><input class="search" placeholder="Auftragsnummer, Kunde, Bezeichnung..." oninput="filterList('orders',this.value)"></div><div id="list" class="list">${orderRows(state.orders)}</div>`}
+function orderRows(a){return a.map(o=>{let c=customer(o.customer);return `<button class="row" onclick="openOrder(${o.id})"><div class="avatar">#</div><div class="row-main"><b>#${esc(o.no)} · ${esc(o.title)}</b><small>${esc(c?.name||"Unbekannt")} · ${esc(c?.address||"")}</small></div><span class="pill ${o.status==="Montage"?"orange":o.status==="Abgeschlossen"?"green":""}">${esc(o.status)}</span></button>`}).join("")||`<div class="empty">Keine Aufträge.</div>`}
+function orderForm(o={}){return `<div class="field"><label>1. Kunde</label><select id="oc">${state.customers.map(c=>`<option value="${c.id}" ${c.id==o.customer?"selected":""}>${esc(c.name)} – ${esc(c.address)}</option>`).join("")}</select></div><div class="field"><label>2. Auftragsnummer frei vergeben</label><input id="on" value="${esc(o.no)}" placeholder="z.B. 4711"></div><div class="field"><label>Bezeichnung</label><input id="ot" value="${esc(o.title)}"></div><div class="field"><label>Beschreibung</label><textarea id="od">${esc(o.desc)}</textarea></div><div class="field"><label>Status</label><select id="os">${["Neu","In Planung","In Bearbeitung","Montage","Abgeschlossen","Storniert"].map(x=>`<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label>Mitarbeiter</label><select id="oe">${state.employees.map(e=>`<option ${e.name===o.employee?"selected":""}>${esc(e.name)}</option>`).join("")}</select></div>`}
+function newOrder(){if(!can("orders"))return alert("Keine Berechtigung.");openModal(`<h2>Neuer Auftrag</h2>${orderForm()}<div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveOrder()">Speichern</button></div>`)}
+function saveOrder(id=null){let o=id?order(id):{id:Date.now()};o.customer=+document.getElementById("oc").value;o.no=document.getElementById("on").value.trim();o.title=document.getElementById("ot").value.trim();o.desc=document.getElementById("od").value.trim();o.status=document.getElementById("os").value;o.employee=document.getElementById("oe").value;if(!o.no||!o.title)return alert("Auftragsnummer und Bezeichnung sind Pflichtfelder.");if(!id)state.orders.push(o);save();closeModal();id?openOrder(id):go("orders")}
+function openOrder(id){let o=order(id),c=customer(o.customer),recs=state.complaints.filter(x=>x.order==id),evs=state.events.filter(x=>x.order==id);document.getElementById("app").innerHTML=baseNoNav(`<button class="back" onclick="go('orders')">← Aufträge</button><h1 class="section-title">Auftrag #${esc(o.no)}</h1><div class="detail"><h3>${esc(o.title)}</h3><p>${esc(o.desc)}</p><p><b>Kunde</b><br>${esc(c?.name||"")}<br>${esc(c?.address||"")}</p><p><span class="pill">${esc(o.status)}</span> · ${esc(o.employee)}</p>${can("orders")?`<div class="actions"><button class="primary" onclick="editOrder(${id})">✏️ Bearbeiten</button>${can("orders","delete")?`<button class="danger" onclick="delOrder(${id})">🗑️ Löschen</button>`:""}</div>`:""}</div><div class="detail" style="margin-top:12px"><h3>📅 Termine</h3>${evs.map(e=>`<button class="row" onclick="openEvent(${e.id})"><div class="row-main"><b>${esc(e.date)} · ${esc(e.time)}</b><small>${esc(e.title)}</small></div><span>›</span></button>`).join("")||`<div class="empty">Keine Termine.</div>`}</div><div class="detail" style="margin-top:12px"><h3>⚠️ Reklamationen</h3>${recs.map(x=>`<button class="row" onclick="openComplaint(${x.id})"><div class="row-main"><b>${esc(x.no)} · ${esc(x.title)}</b><small>${esc(x.status)}</small></div><span>›</span></button>`).join("")||`<div class="empty">Keine Reklamationen.</div>`}${can("complaints")?`<button class="primary" style="width:100%;margin-top:8px" onclick="newComplaint(${id})">＋ Reklamation</button>`:""}</div>`)}
+function editOrder(id){if(!can("orders"))return alert("Keine Berechtigung.");openModal(`<h2>Auftrag bearbeiten</h2>${orderForm(order(id))}<div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveOrder(${id})">Speichern</button></div>`)}
+function delOrder(id){if(!can("orders","delete"))return alert("Keine Löschberechtigung.");if(!confirm("Auftrag wirklich löschen?"))return;state.orders=state.orders.filter(x=>x.id!=id);state.events=state.events.filter(x=>x.order!=id);state.complaints=state.complaints.filter(x=>x.order!=id);save();go("orders")}
+function setCalendarView(view){state.calendarView=view;render()}\nfunction calendar(){let d=state.calendarDate||new Date(),h=state.calendarView==="week"?calendarWeek(d):state.calendarView==="day"?calendarDay(d):calendarMonth(d);return h}
+function calHeader(d,a){return `<button class="back" onclick="go('home')">← Start</button><div style="display:flex;justify-content:space-between;align-items:center"><h1 class="section-title">Kalender</h1><button class="primary" onclick="newEvent('${localISO(d)}')">＋ Termin</button></div><div class="cal"><div class="calhead"><button class="icon" onclick="calendarMove(-1)">‹</button><b>${d.toLocaleDateString("de-DE",{month:"long",year:"numeric"})}</b><div><button class="icon" onclick="calendarToday()">Heute</button><button class="icon" onclick="calendarMove(1)">›</button></div></div><div class="viewtabs"><button class="viewtab ${a==="month"?"active":""}" onclick="setCalendarView('month')">Monat</button><button class="viewtab ${a==="week"?"active":""}" onclick="setCalendarView('week')">Woche</button><button class="viewtab ${a==="day"?"active":""}" onclick="setCalendarView('day')">Tag</button></div>`}
+function calendarMonth(d){let y=d.getFullYear(),m=d.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0),start=(first.getDay()+6)%7,total=Math.ceil((start+last.getDate())/7)*7,cells="",names=["Mo","Di","Mi","Do","Fr","Sa","So"];for(let i=0;i<total;i++){let x=new Date(y,m,i-start+1),iso=localISO(x),ev=state.events.filter(e=>e.date===iso),today=iso===localISO(new Date());cells+=`<div class="day ${x.getMonth()===m?"":"mutedday"} ${today?"today":""}" onclick="newEvent('${iso}')"><em>${x.getDate()}</em>${ev.slice(0,3).map(e=>`<button class="event ${e.type==="Termin"?"green":"orange"}" onclick="event.stopPropagation();openEvent(${e.id})">${esc(e.time)} ${esc(e.title)}</button>`).join("")}${ev.length>3?`<small>+${ev.length-3}</small>`:""}</div>`}return `${calHeader(d,"month")}<div class="weekdays">${names.map(n=>`<div>${n}</div>`).join("")}</div><div class="days">${cells}</div></div>${calendarList()}`}
+function startWeek(d){let x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));x.setHours(12);return x}
+function calendarWeek(d){let s=startWeek(d),names=["Mo","Di","Mi","Do","Fr","Sa","So"],cols="";for(let i=0;i<7;i++){let x=new Date(s);x.setDate(s.getDate()+i),iso=localISO(x);cols+=`<div class="weekcol"><div class="weekday">${names[i]}<br><b>${x.getDate()}.</b></div><div class="weekbody" onclick="newEvent('${iso}')">${state.events.filter(e=>e.date===iso).map(e=>`<button class="weekevent ${e.type==="Termin"?"green":"orange"}" onclick="event.stopPropagation();openEvent(${e.id})"><b>${esc(e.time)}</b><br>${esc(e.title)}</button>`).join("")}</div></div>`}return `${calHeader(d,"week")}<div class="weekview">${cols}</div></div>${calendarList()}`}
+function calendarDay(d){let iso=localISO(d),rows="";for(let h=7;h<=19;h++)rows+=`<div class="hour">${String(h).padStart(2,"0")}:00</div>`;return `${calHeader(d,"day")}<div class="dayview"><div class="hours">${rows}</div><div class="dayevents" onclick="newEvent('${iso}')">${state.events.filter(e=>e.date===iso).map(e=>`<button class="dayevent" onclick="event.stopPropagation();openEvent(${e.id})"><b>${esc(e.time)}${e.endTime?" – "+esc(e.endTime):""}</b><br>${esc(e.title)}</button>`).join("")}</div></div></div>${calendarList()}`}
+function calendarList(){let a=state.events.slice().sort((x,y)=>(x.date+x.time).localeCompare(y.date+y.time));return `<div class="detail" style="margin-top:12px"><h3>Termine & Montagen</h3>${a.map(e=>{let c=customer(e.customer),o=order(e.order);return `<button class="row" onclick="openEvent(${e.id})"><span>${e.type==="Montage"?"🔧":"📅"}</span><div class="row-main"><b>${esc(e.date)} · ${esc(e.time)}${e.endTime?"–"+esc(e.endTime):""}</b><small>${esc(e.title)}${o?" · Auftrag #"+esc(o.no):""}${c?" · "+esc(c.name):""}</small></div><span>›</span></button>`}).join("")||`<div class="empty">Keine Termine.</div>`}</div>`}
+function calendarMove(n){let d=new Date(state.calendarDate);if(state.calendarView==="month")d.setMonth(d.getMonth()+n);else if(state.calendarView==="week")d.setDate(d.getDate()+7*n);else d.setDate(d.getDate()+n);state.calendarDate=d;render()}
+function calendarToday(){state.calendarDate=new Date();render()}
+function eventForm(e={}){return `<div class="field"><label>Art</label><select id="et"><option ${e.type!=="Termin"?"selected":""}>Montage</option><option ${e.type==="Termin"?"selected":""}>Termin</option></select></div><div class="field"><label>Datum</label><input id="ed" type="date" value="${esc(e.date||localISO(state.calendarDate))}"></div><div class="field"><label>Von</label><input id="eb" type="time" value="${esc(e.time||"09:00")}"></div><div class="field"><label>Bis</label><input id="ee" type="time" value="${esc(e.endTime||"10:00")}"></div><div class="field"><label>Auftrag</label><select id="eo"><option value="">Kein Auftrag</option>${state.orders.map(o=>`<option value="${o.id}" ${e.order==o.id?"selected":""}>#${esc(o.no)} – ${esc(o.title)}</option>`).join("")}</select></div><div class="field"><label>Kunde</label><select id="ec"><option value="">Kein Kunde</option>${state.customers.map(c=>`<option value="${c.id}" ${e.customer==c.id?"selected":""}>${esc(c.name)} – ${esc(c.address)}</option>`).join("")}</select></div><div class="field"><label>Titel</label><input id="ei" value="${esc(e.title||"Montage")}"></div><div class="field"><label>Notiz</label><textarea id="en">${esc(e.note||"")}</textarea></div>`}
+function newEvent(date="",id=null){if(!can("calendar"))return alert("Keine Berechtigung.");let e=id?state.events.find(x=>x.id==id):{};openModal(`<h2>${id?"Termin bearbeiten":"Neuer Termin"}</h2>${eventForm({...e,date:date||e.date})}<div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveEvent(${id||"null"})">Speichern</button></div>`)}
+function saveEvent(id){let e=id?state.events.find(x=>x.id==id):{id:Date.now()};Object.assign(e,{type:document.getElementById("et").value,date:document.getElementById("ed").value,time:document.getElementById("eb").value,endTime:document.getElementById("ee").value,order:+document.getElementById("eo").value||null,customer:+document.getElementById("ec").value||null,title:document.getElementById("ei").value.trim(),note:document.getElementById("en").value.trim()});if(!e.date||!e.time||!e.title)return alert("Datum, Uhrzeit und Titel sind Pflichtfelder.");if(e.endTime&&e.endTime<e.time)return alert("Endzeit muss nach der Startzeit liegen.");if(!id)state.events.push(e);save();closeModal();state.calendarDate=new Date(e.date+"T12:00:00");render()}
+function openEvent(id){let e=state.events.find(x=>x.id==id),c=customer(e.customer),o=order(e.order);openModal(`<h2>📅 ${esc(e.title)}</h2><div class="detail"><p><b>${esc(e.date)} · ${esc(e.time)}${e.endTime?" – "+esc(e.endTime):""}</b></p><p>${esc(e.type)}</p>${c?`<p><b>Kunde:</b><br>${esc(c.name)}<br>${esc(c.address)}</p>`:""}${o?`<p><b>Auftrag:</b> #${esc(o.no)} · ${esc(o.title)}</p>`:""}${e.note?`<p><b>Notiz:</b><br>${esc(e.note)}</p>`:""}</div><div class="actions"><button class="primary" onclick="newEvent('',${id})">✏️ Bearbeiten</button><button class="danger" onclick="deleteEvent(${id})">🗑️ Löschen</button></div>`)}
+function deleteEvent(id){if(!can("calendar","delete"))return alert("Keine Löschberechtigung.");if(confirm("Termin wirklich löschen?")){state.events=state.events.filter(x=>x.id!=id);save();closeModal();render()}}
+function complaints(){return `<button class="back" onclick="go('home')">← Start</button><div style="display:flex;justify-content:space-between;align-items:center"><h1 class="section-title">Reklamationen</h1></div><div class="list">${state.complaints.map(x=>`<button class="row" onclick="openComplaint(${x.id})"><div class="avatar">⚠️</div><div class="row-main"><b>${esc(x.no)} · ${esc(x.title)}</b><small>Auftrag #${esc(order(x.order)?.no||"")} · ${esc(x.status)}</small></div><span>›</span></button>`).join("")||`<div class="empty">Keine Reklamationen.</div>`}</div>`}
+function newComplaint(orderId){if(!can("complaints"))return alert("Keine Berechtigung.");openModal(`<h2>Neue Reklamation</h2><div class="field"><label>Reklamationsnummer</label><input id="rn" value="R-${String(state.complaints.length+1).padStart(3,"0")}"></div><div class="field"><label>Bezeichnung</label><input id="rt"></div><div class="field"><label>Beschreibung</label><textarea id="rd"></textarea></div><div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveComplaint(${orderId})">Speichern</button></div>`)}
+function saveComplaint(orderId){state.complaints.push({id:Date.now(),no:document.getElementById("rn").value,title:document.getElementById("rt").value,desc:document.getElementById("rd").value,status:"Offen",order:orderId});save();closeModal();openOrder(orderId)}
+function openComplaint(id){let x=state.complaints.find(c=>c.id==id),o=order(x.order);openModal(`<h2>⚠️ ${esc(x.no)}</h2><div class="detail"><h3>${esc(x.title)}</h3><p>${esc(x.desc)}</p><p>Status: <span class="pill">${esc(x.status)}</span></p><p>Auftrag: #${esc(o?.no||"")}</p></div>${can("complaints")?`<div class="actions"><button class="primary" onclick="editComplaint(${id})">✏️ Bearbeiten</button>${can("complaints","delete")?`<button class="danger" onclick="deleteComplaint(${id})">🗑️ Löschen</button>`:""}</div>`:""}`)}
+function editComplaint(id){let x=state.complaints.find(c=>c.id==id);openModal(`<h2>Reklamation bearbeiten</h2><div class="field"><label>Nummer</label><input id="rn" value="${esc(x.no)}"></div><div class="field"><label>Bezeichnung</label><input id="rt" value="${esc(x.title)}"></div><div class="field"><label>Beschreibung</label><textarea id="rd">${esc(x.desc)}</textarea></div><div class="field"><label>Status</label><select id="rs">${["Offen","In Bearbeitung","Erledigt"].map(s=>`<option ${s===x.status?"selected":""}>${s}</option>`).join("")}</select></div><div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="saveComplaintEdit(${id})">Speichern</button></div>`)}
+function saveComplaintEdit(id){let x=state.complaints.find(c=>c.id==id);x.no=document.getElementById("rn").value;x.title=document.getElementById("rt").value;x.desc=document.getElementById("rd").value;x.status=document.getElementById("rs").value;save();closeModal();openComplaint(id)}
+function deleteComplaint(id){if(!can("complaints","delete"))return alert("Keine Löschberechtigung.");if(confirm("Reklamation löschen?")){state.complaints=state.complaints.filter(x=>x.id!=id);save();closeModal();go("complaints")}}
+function time(){return `<button class="back" onclick="go('home')">← Start</button><h1 class="section-title">Zeiterfassung</h1><div class="hero"><h1>${state.clocked?"🟢 Eingestempelt":"⚪ Ausgestempelt"}</h1><p>Arbeitszeitübersicht und Start/Stop für den Prototyp.</p><button class="primary" onclick="state.clocked=!state.clocked;save();render()">${state.clocked?"Ausstempeln":"Einstempeln"}</button></div><div class="detail"><h3>Arbeitszeitübersicht</h3><p>Heute · ${state.clocked?"Arbeitszeit läuft":"Noch nicht gestartet"}</p><div class="notice">Die Admin-Rechte für Stempelbereiche können später je Mitarbeiter festgelegt werden.</div></div>`}
+function documents(){return `<button class="back" onclick="go('home')">← Start</button><h1 class="section-title">Dokumente</h1><div class="detail"><h3>📄 Dokumente</h3><p class="muted">PDF, Bilder und weitere Dateitypen können in der nächsten Backend-Stufe hochgeladen und direkt Kunde/Auftrag zugeordnet werden.</p><input type="file" multiple accept=".pdf,image/*,.doc,.docx,.xls,.xlsx"></div>`}
+function chat(){return `<button class="back" onclick="go('home')">← Start</button><h1 class="section-title">Chat</h1><div class="list"><div class="row"><div class="avatar">MM</div><div class="row-main"><b>Max Mustermann</b><small>Arbeitschat – ohne Statusbilder</small></div><span>›</span></div><div class="row"><div class="avatar">TS</div><div class="row-main"><b>Thomas Schneider</b><small>Montage / Aufträge</small></div><span>›</span></div></div>`}
+function more(){return `<h1 class="section-title">Mehr</h1><div class="grid"><div class="card" onclick="go('admin')"><div class="ico">⚙️</div><b>Admin</b><small>Mitarbeiter & Rechte</small></div><div class="card" onclick="go('documents')"><div class="ico">📄</div><b>Dokumente</b><small>PDF & Dateien</small></div><div class="card" onclick="go('complaints')"><div class="ico">⚠️</div><b>Reklamationen</b><small>Bearbeiten</small></div><div class="card" onclick="go('time')"><div class="ico">⏱️</div><b>Arbeitszeiten</b><small>Start / Stop</small></div></div><div class="notice">💾 Testdaten werden auf diesem Gerät gespeichert.</div><button class="danger" style="width:100%" onclick="resetDemo()">↺ Demo-Daten zurücksetzen</button>`}
+function admin(){return `<button class="back" onclick="go('more')">← Mehr</button><h1 class="section-title">Admin-Bereich</h1><div class="detail"><h3>👥 Mitarbeiter</h3>${state.employees.map((e,i)=>`<div class="row"><div class="avatar">${esc(e.name.split(" ").map(x=>x[0]).join("").slice(0,2))}</div><div class="row-main"><b>${esc(e.name)}</b><small>${esc(e.role)} · Benutzername: ${esc(e.name.split(" ")[0])}</small></div></div><button class="primary" style="width:100%;margin-bottom:8px" onclick="permissions(${i})">🔐 Rechte verwalten</button>`).join("")}</div><div class="detail" style="margin-top:12px"><h3>⏱️ Stempelbereiche</h3><p class="muted">Hier werden später die Bereiche pro Mitarbeiter freigegeben oder deaktiviert.</p></div><div class="detail" style="margin-top:12px"><h3>🔔 Benachrichtigungen</h3><p class="muted">Chat, Termine, Montagen und Reklamationen können individuell aktiviert werden. Arbeitszeiten-Modus kann Benachrichtigungen stummschalten.</p></div>`}
+function permissions(i){let e=state.employees[i],p=e.permissions||{};openModal(`<h2>Rechte – ${esc(e.name)}</h2><div class="permgrid">${[["customers","Kunden bearbeiten"],["orders","Aufträge bearbeiten"],["complaints","Reklamationen bearbeiten"],["calendar","Kalender bearbeiten"],["documents","Dokumente verwalten"],["delete","Löschen erlauben"]].map(([k,l])=>`<div class="perm"><label>${l}<input type="checkbox" id="p_${k}" ${p[k]?"checked":""}></label></div>`).join("")}</div><div class="actions"><button class="secondary" onclick="closeModal()">Abbrechen</button><button class="primary" onclick="savePerm(${i})">Speichern</button></div>`)}
+function savePerm(i){let e=state.employees[i];e.permissions={customers:document.getElementById("p_customers").checked,orders:document.getElementById("p_orders").checked,complaints:document.getElementById("p_complaints").checked,calendar:document.getElementById("p_calendar").checked,documents:document.getElementById("p_documents").checked,delete:document.getElementById("p_delete").checked};save();closeModal();render()}
+function resetDemo(){if(confirm("Alle Teständerungen zurücksetzen?")){localStorage.removeItem(KEY);location.reload()}}
+function baseNoNav(body){return `<div class="app"><div class="top"><div class="brand">Work<span>Connect</span></div></div><main class="page">${body}</main></div>`}
+function openModal(x){document.getElementById("modal").innerHTML=x;document.getElementById("modalwrap").classList.add("open")}
+function closeModal(){document.getElementById("modalwrap").classList.remove("open")}
+function showNotifications(){openModal(`<h2>🔔 Benachrichtigungen</h2><div class="notice">Keine neuen Benachrichtigungen.</div><p class="muted">Im Admin-Bereich können die Benachrichtigungstypen später pro Mitarbeiter individuell geschaltet werden.</p><button class="primary" style="width:100%" onclick="closeModal()">Schließen</button>`)}
+render();
+</script>
+</body>
+</html>
